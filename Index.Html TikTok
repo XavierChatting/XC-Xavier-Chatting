@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok - Platform Video Pendek</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            color: #f0f0f0;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Background efek neon */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 247, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 0, 230, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(0, 255, 136, 0.05) 0%, transparent 50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        /* Glowing dots efek */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 10% 15%, rgba(0, 247, 255, 0.3) 1px, transparent 2px),
+                radial-gradient(2px 2px at 90% 40%, rgba(255, 0, 230, 0.3) 1px, transparent 2px),
+                radial-gradient(2px 2px at 30% 85%, rgba(0, 255, 136, 0.3) 1px, transparent 2px),
+                radial-gradient(2px 2px at 70% 25%, rgba(255, 234, 0, 0.3) 1px, transparent 2px),
+                radial-gradient(2px 2px at 50% 50%, rgba(255, 255, 255, 0.2) 1px, transparent 2px);
+            background-size: 300px 300px;
+            z-index: -1;
+            pointer-events: none;
+            animation: float 20s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-50px, -50px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: rgba(20, 20, 30, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 247, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Glowing border efek */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #00f7ff, #ff00e6, #00ff88, #ffea00);
+            z-index: -1;
+            border-radius: 22px;
+            opacity: 0.3;
+            animation: borderGlow 4s infinite alternate;
+        }
+        
+        @keyframes borderGlow {
+            0% { opacity: 0.2; }
+            100% { opacity: 0.5; }
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 247, 255, 0.2);
+        }
+        
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo img {
+            width: 80px;
+            height: 80px;
+            border-radius: 15px;
+            object-fit: cover;
+            border: 3px solid rgba(0, 247, 255, 0.3);
+            box-shadow: 0 0 15px rgba(0, 247, 255, 0.3);
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(to right, #00f7ff, #ff00e6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #aaa;
+            font-weight: 300;
+            margin-bottom: 30px;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        
+        .section {
+            background-color: rgba(30, 30, 40, 0.6);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .section-title {
+            color: #00f7ff;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 247, 255, 0.2);
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title::before {
+            content: '▶';
+            margin-right: 10px;
+            color: #ff00e6;
+        }
+        
+        .history-item {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            border-left: 3px solid #00ff88;
+        }
+        
+        .history-item h4 {
+            color: #f0f0f0;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+        
+        .history-item p {
+            color: #ccc;
+            line-height: 1.6;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        th {
+            background-color: rgba(0, 247, 255, 0.2);
+            color: #00f7ff;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(0, 247, 255, 0.3);
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        tr {
+            transition: background-color 0.3s ease;
+        }
+        
+        tr:hover {
+            background-color: rgba(0, 247, 255, 0.05);
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 15px 30px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-tiktok {
+            background-color: #060807;
+            color: white;
+            border: 1px solid rgba(0, 247, 255, 0.3);
+        }
+        
+        .btn-tiktok:hover {
+            background-color: #000;
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.5);
+            transform: scale(1.05);
+        }
+        
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+            border: 1px solid rgba(37, 211, 102, 0.3);
+        }
+        
+        .btn-whatsapp:hover {
+            background-color: #1da851;
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.5);
+            transform: scale(1.05);
+        }
+        
+        .btn img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                border-radius: 15px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .content {
+                gap: 20px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .links {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="foto1.jpg" alt="TikTok Logo">
+            </div>
+            <h1>TikTok</h1>
+            <div class="subtitle">Platform Video Pendek yang Mengubah Cara Kita Berkreasi</div>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2 class="section-title">Tentang TikTok</h2>
+                <p style="font-size: 1.1rem; line-height: 1.7; color: #ddd; margin-bottom: 20px;">
+                    TikTok adalah aplikasi berbagi video pendek yang digemari masyarakat global. 
+                    Dengan fitur-fitur kreatif dan algoritme yang personal, TikTok memungkinkan 
+                    pengguna untuk mengekspresikan diri melalui konten video yang menghibur dan inspiratif.
+                </p>
+                
+                <div class="history">
+                    <div class="history-item">
+                        <h4>1. Awal Mula di Tiongkok (2016)</h4>
+                        <p>Aplikasi pendahulunya bernama Douyin diluncurkan di Tiongkok oleh perusahaan ByteDance pada September 2016. Douyin sangat sukses di pasar domestik dengan fitur-fitur inovatif yang disesuaikan dengan preferensi pengguna Tiongkok.</p>
+                    </div>
+                    
+                    <div class="history-item">
+                        <h4>2. Ekspansi Global (2017)</h4>
+                        <p>ByteDance kemudian meluncurkan versi internasionalnya dengan nama TikTok di luar Tiongkok (termasuk Indonesia) pada September 2017. TikTok dengan cepat mendapatkan popularitas di kalangan remaja dan dewasa muda di seluruh dunia.</p>
+                    </div>
+                    
+                    <div class="history-item">
+                        <h4>3. Penggabungan dengan Musical.ly (2018)</h4>
+                        <p>Pada Agustus 2018, ByteDance menggabungkan TikTok dengan aplikasi lip-sync populer Musical.ly (yang sudah ada sejak 2014). Penggabungan ini sangat mempercepat pertumbuhan pengguna TikTok, karena semua akun dan komunitas Musical.ly bermigrasi ke TikTok.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">Pencipta Aplikasi TikTok</h2>
+                <table>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Bidang & Peran</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Zhang Yiming (张一鸣)</td>
+                        <td>Founder & CEO of ByteDance - Penggagas ide dan visi utama platform</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Lydia (Yáng Lùyán) (杨璐元)</td>
+                        <td>Lead Developer - Bertanggung jawab atas pengembangan teknis aplikasi</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Alex (Ào Fán) (傲凡)</td>
+                        <td>Pengembang inti Douyin - Mengembangkan algoritme rekomendasi konten</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div class="links">
+            <a href="https://www.tiktok.com" target="_blank" class="btn btn-tiktok">
+                <img src="https://www.tiktok.com/favicon.ico" alt="TikTok Icon">
+                Kunjungi TikTok
+            </a>
+            
+            <a href="https://wa.me/6289513640405" target="_blank" class="btn btn-whatsapp">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Icon">
+                Hubungi Kami via WhatsApp
+            </a>
+        </div>
+        
+        <div class="footer">
+            <p>© 2023 TikTok Information Page | Informasi tentang platform video pendek terpopuler</p>
+        </div>
+    </div>
+</body>
+</html>
